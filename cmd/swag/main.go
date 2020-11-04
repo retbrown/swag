@@ -13,6 +13,7 @@ import (
 const (
 	searchDirFlag        = "dir"
 	excludeFlag          = "exclude"
+	visibilityFlag       = "visibility"
 	generalInfoFlag      = "generalInfo"
 	propertyStrategyFlag = "propertyStrategy"
 	outputFlag           = "output"
@@ -41,6 +42,10 @@ var initFlags = []cli.Flag{
 	&cli.StringFlag{
 		Name:  excludeFlag,
 		Usage: "Exclude directories and files when searching, comma separated",
+	},
+	&cli.StringFlag{
+		Name:  visibilityFlag,
+		Usage: "Visibility flag to generate. Default is all docs",
 	},
 	&cli.StringFlag{
 		Name:    propertyStrategyFlag,
@@ -101,6 +106,7 @@ func initAction(c *cli.Context) error {
 	return gen.New().Build(&gen.Config{
 		SearchDir:           c.String(searchDirFlag),
 		Excludes:            c.String(excludeFlag),
+		Visibility:          c.String(visibilityFlag),
 		MainAPIFile:         c.String(generalInfoFlag),
 		PropNamingStrategy:  strategy,
 		OutputDir:           c.String(outputFlag),

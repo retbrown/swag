@@ -42,6 +42,9 @@ type Config struct {
 	// excludes dirs and files in SearchDir,comma separated
 	Excludes string
 
+	// only generates at that visibility level
+	Visibility string
+
 	// OutputDir represents the output directory for all the generated files
 	OutputDir string
 
@@ -82,6 +85,7 @@ func (g *Gen) Build(config *Config) error {
 	log.Println("Generate swagger docs....")
 	p := swag.New(swag.SetMarkdownFileDirectory(config.MarkdownFilesDir),
 		swag.SetExcludedDirsAndFiles(config.Excludes),
+		swag.SetVisibility(config.Visibility),
 		swag.SetCodeExamplesDirectory(config.CodeExampleFilesDir))
 	p.PropNamingStrategy = config.PropNamingStrategy
 	p.ParseVendor = config.ParseVendor

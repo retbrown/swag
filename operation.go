@@ -27,6 +27,7 @@ type Operation struct {
 	spec.Operation
 
 	parser              *Parser
+	Visibility          string
 	codeExampleFilesDir string
 }
 
@@ -121,6 +122,8 @@ func (operation *Operation) ParseComment(comment string, astFile *ast.File) erro
 		err = operation.ParseSecurityComment(lineRemainder)
 	case "@deprecated":
 		operation.Deprecate()
+	case "@visibility":
+		operation.Visibility = lineRemainder
 	case "@x-codesamples":
 		err = operation.ParseCodeSample(attribute, commentLine, lineRemainder)
 	default:

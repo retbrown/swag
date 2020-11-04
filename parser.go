@@ -93,6 +93,8 @@ type Parser struct {
 
 	// excludes excludes dirs and files in SearchDir
 	excludes map[string]bool
+
+	visibility string
 }
 
 // New creates a new Parser with default properties.
@@ -153,6 +155,15 @@ func SetExcludedDirsAndFiles(excludes string) func(*Parser) {
 				f = filepath.Clean(f)
 				p.excludes[f] = true
 			}
+		}
+	}
+}
+
+func SetVisibility(visibility string) func(*Parser) {
+	return func(p *Parser) {
+		f := strings.TrimSpace(visibility)
+		if f != "" {
+			p.visibility = f
 		}
 	}
 }
@@ -569,6 +580,10 @@ func (parser *Parser) ParseRouterAPIInfo(fileName string, astFile *ast.File) err
 				}
 				var pathItem spec.PathItem
 				var ok bool
+
+				if parser.visibility != "" && operation.Visibility != parser.visibility {
+					continue
+				}
 
 				if pathItem, ok = parser.swagger.Paths.Paths[operation.Path]; !ok {
 					pathItem = spec.PathItem{}
